@@ -33,7 +33,7 @@
                 border-radius: 50%;
             }
             .voteButton {
-                background-color: #d12ea8;
+                background-color: DodgerBlue;
                 border: none;
                 color: white;
                 padding: 15px 32px;
@@ -43,6 +43,16 @@
                 font-size: 14px;
                 margin: 4px 2px;
                 cursor: pointer;
+                border-radius: 50%;
+            }
+            .editbutton {
+                background-color: DodgerBlue;
+                border: none;
+                color: white;
+                padding: 12px 16px;
+                font-size: 16px;
+                cursor: pointer;
+                display: inline;
                 border-radius: 50%;
             }
             .withborder {
@@ -80,10 +90,20 @@
         var valueToBeVoted = document.getElementById(id.id + "Element");
         var textValue = valueToBeVoted.innerHTML;
         var splitStrings = textValue.split(" ");
-        var votes = parseInt(splitStrings[1]);
-        valueToBeVoted.innerHTML =splitStrings[0]+" "+ (votes+1).toString()+" "+splitStrings[2];
-        console.log(votes);
+        var votes = parseInt(splitStrings[splitStrings.length-2]);
+        valueToBeVoted.innerHTML =splitStrings.slice(0,splitStrings.length-2).toString().split(",").join(" ")+" "+ (votes+1).toString()+" "+splitStrings[splitStrings.length-1];
     }
+
+    function Edit(id)
+    {
+        var valueToBeVoted = document.getElementById(id.id + "Element");
+        var textValue = valueToBeVoted.innerHTML;
+        var splitStrings = textValue.split(" ");
+        var votes = parseInt(splitStrings[splitStrings.length-2]);
+        var newText = prompt("Enter the new task","");
+        valueToBeVoted.innerHTML =newText+" "+ (votes).toString()+" "+splitStrings[splitStrings.length-1];
+    }
+
     function Delete(id)
     {
         var valueToBeDeleted = document.getElementById(id.id + "Element");
@@ -93,15 +113,16 @@
     function AddToList1(textId,listId)
     {
         var valueToBeAdded = document.getElementById(textId.id).value;
+        var idToBeGiven = valueToBeAdded.split(' ').join('_');
 
         var ul = document.getElementById(listId.id);
         var li = document.createElement("li");
-        li.setAttribute("id", valueToBeAdded);
+        li.setAttribute("id", idToBeGiven);
         li.setAttribute("class","withborder");
 
         var valuee = document.createElement("p");
         var textValue = document.createTextNode(valueToBeAdded+" 0 Vote(s)");
-        valuee.setAttribute("id",valueToBeAdded+"Element");
+        valuee.setAttribute("id",idToBeGiven+"Element");
         valuee.appendChild(textValue);
         valuee.setAttribute("class","TextValue");
         li.appendChild(valuee);
@@ -109,7 +130,7 @@
         var voteButton = document.createElement("BUTTON");
         voteButton.appendChild(document.createTextNode("Vote"))
         voteButton.setAttribute("class","voteButton");
-        voteButton.setAttribute("onclick",`Vote(${valueToBeAdded})`);
+        voteButton.setAttribute("onclick",`Vote(${idToBeGiven})`);
         li.appendChild(voteButton);
 
         var deleteButton = document.createElement("BUTTON");
@@ -118,8 +139,17 @@
         itag.setAttribute("class","fa fa-trash");
         deleteButton.appendChild(itag);
         deleteButton.setAttribute("class","deletebutton");
-        deleteButton.setAttribute("onclick",`Delete(${valueToBeAdded})`);
+        deleteButton.setAttribute("onclick",`Delete(${idToBeGiven})`);
         li.appendChild(deleteButton);
+
+        var editButton = document.createElement("BUTTON");
+        editButton.appendChild(document.createTextNode("Edit"))
+        var etag = document.createElement("i");
+        etag.setAttribute("class","fa fa-edit");
+        editButton.appendChild(etag);
+        editButton.setAttribute("class","editbutton");
+        editButton.setAttribute("onclick",`Edit(${idToBeGiven})`);
+        li.appendChild(editButton);
 
         ul.appendChild(li);
     }  
